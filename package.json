@@ -1,0 +1,10 @@
+{
+  "name": "cns-ai-portfolio",
+  "version": "1.0.0",
+  "description": "Digital Portfolio for CNS and AI",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y live-server"
+  },
+  "dependencies": {}
+}
