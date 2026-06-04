@@ -435,6 +435,10 @@ input:checked + .slider:before {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 20%; /* Hạ ảnh xuống bằng cách dịch tâm hiển thị lên 20% */
+    image-rendering: -webkit-optimize-contrast; /* Tăng độ nét khi co dãn trên Chrome/Safari */
+    image-rendering: crisp-edges; /* Tăng độ nét viền */
+    filter: contrast(1.04) saturate(1.02); /* Tăng độ tương phản nhẹ giúp ảnh nét và sâu hơn */
     border-radius: 50%;
     transition: var(--transition-smooth);
 }
