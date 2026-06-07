@@ -5,7 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Initialize Application Components ---
     initTheme();
-    initScrollSpy();
+    initSceneRouter();
     initDirectoryExplorer();
     initCraapTable();
     initLightbox();
@@ -58,30 +58,53 @@ function initTheme() {
 }
 
 // ==========================================================================
-// 2. SCROLL SPY (Navigation Link Highlighting on Scroll)
+// 2. SCENE ROUTER (Handles tab/section switching as separate visual scenes)
 // ==========================================================================
-function initScrollSpy() {
-    const sections = document.querySelectorAll('section');
+function initSceneRouter() {
     const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('section');
 
     if (sections.length === 0 || navLinks.length === 0) return;
 
-    window.addEventListener('scroll', () => {
-        let current = '';
+    function switchScene(hash) {
+        // Fallback to '#gioi-thieu' if hash is empty or not in our expected set
+        const validHashes = ['#gioi-thieu', '#du-an', '#tong-ket'];
+        const activeHash = validHashes.includes(hash) ? hash : '#gioi-thieu';
+        
+        // Update URL hash without jumping if hash was empty initially
+        if (!window.location.hash || !validHashes.includes(window.location.hash)) {
+            history.replaceState(null, null, activeHash);
+        }
+
+        // Toggle active class on sections for the 3D-scale fade transition
         sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            if (window.scrollY >= (sectionTop - 180)) {
-                current = section.getAttribute('id');
+            if ('#' + section.id === activeHash) {
+                section.classList.add('active-scene');
+            } else {
+                section.classList.remove('active-scene');
             }
         });
 
+        // Toggle active class on nav links
         navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href').substring(1) === current) {
+            if (link.getAttribute('href') === activeHash) {
                 link.classList.add('active');
+            } else {
+                link.classList.remove('active');
             }
         });
+
+        // Scroll back to top immediately when scene transitions
+        window.scrollTo(0, 0);
+    }
+
+    // Listen to hash change for browser navigation (back/forward)
+    window.addEventListener('hashchange', () => {
+        switchScene(window.location.hash);
     });
+
+    // Initialize the route on page load
+    switchScene(window.location.hash);
 }
 
 // ==========================================================================
@@ -326,7 +349,7 @@ function initTeacherFeedback() {
 }
 
 // ==========================================================================
-// 9. REVEAL ANIMATIONS ON SCROLL
+// 9. REVEAL ANIMATIONS ON SCROLL & SCENE TRANSITION
 // ==========================================================================
 function initRevealOnScroll() {
     const reveals = document.querySelectorAll('.reveal');
@@ -335,7 +358,7 @@ function initRevealOnScroll() {
         const windowHeight = window.innerHeight;
         reveals.forEach(el => {
             const elementTop = el.getBoundingClientRect().top;
-            const elementVisible = 100;
+            const elementVisible = 80;
             if (elementTop < windowHeight - elementVisible) {
                 el.classList.add('visible');
             } else {
@@ -345,6 +368,13 @@ function initRevealOnScroll() {
     }
 
     window.addEventListener('scroll', checkReveal);
-    // Trigger once on load to show elements already in view
-    checkReveal();
+    
+    // Reset and trigger reveal animation when hash changes (scene transition)
+    window.addEventListener('hashchange', () => {
+        reveals.forEach(el => el.classList.remove('visible'));
+        setTimeout(checkReveal, 200); // Trigger after scene entrance scale/slide transition
+    });
+    
+    // Trigger once on initial load with a slight delay
+    setTimeout(checkReveal, 200);
 }
