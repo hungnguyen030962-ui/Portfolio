@@ -209,7 +209,7 @@ section.active-scene {
     display: flex;
     align-items: baseline;
     gap: 1.5rem;
-    margin-bottom: 4rem;
+    margin-bottom: 2.25rem;
 }
 
 .section-number {
@@ -433,12 +433,38 @@ h1.hero-name em {
     text-align: center;
     box-shadow: 0 20px 40px var(--shadow-main);
     height: fit-content;
-    transition: var(--transition-smooth);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+}
+
+.profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.profile-card:hover::before {
+    opacity: 1;
 }
 
 .profile-card:hover {
-    border-color: rgba(91, 141, 238, 0.25);
-    transform: translateY(-4px);
+    border-color: transparent;
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(91, 141, 238, 0.12);
 }
 
 .avatar-container {
@@ -529,7 +555,7 @@ h1.hero-name em {
 .projects-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 1.75rem;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -539,20 +565,45 @@ h1.hero-name em {
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
-    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.project-card:hover::before {
+    opacity: 1;
 }
 
 .project-card:hover {
-    border-color: rgba(91,141,238,0.3);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(91,141,238,0.1);
+    border-color: transparent;
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(91, 141, 238, 0.12);
 }
 
 .card-header {
     display: flex;
     align-items: flex-start;
     gap: 1.25rem;
-    padding: 2rem 2rem 1.5rem;
+    padding: 1.5rem 1.5rem 1.15rem;
     border-bottom: 1px solid var(--border);
 }
 
@@ -603,7 +654,7 @@ h1.hero-name em {
 }
 
 .card-body {
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .objective-box {
@@ -620,6 +671,23 @@ h1.hero-name em {
 .objective-box strong {
     color: var(--text);
     font-style: normal;
+}
+
+/* Internal Card Modules */
+.card-module-block {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.card-module-block:last-of-type {
+    margin-bottom: 0.5rem;
+}
+
+.card-module-block .card-section-title {
+    margin-top: 0;
 }
 
 .card-section-title {
@@ -702,21 +770,24 @@ h1.hero-name em {
     align-items: center;
     gap: 0.5rem;
     padding: 0.6rem 1.25rem;
-    background: var(--accent);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+    background-size: 200% auto;
     color: #fff;
     border-radius: 8px;
     text-decoration: none;
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 0.03em;
-    transition: background 0.2s, transform 0.2s;
+    transition: background-position 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s, box-shadow 0.4s;
     border: none;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(91, 141, 238, 0.2);
 }
 
 .btn-download:hover {
-    background: rgba(91, 141, 238, 0.8);
+    background-position: right center;
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(91, 222, 160, 0.3);
 }
 
 /* --- Project Specific Interactive Styles --- */
@@ -1350,7 +1421,49 @@ code.inline {
     border-radius: 14px;
     padding: 2rem;
     position: relative;
-    overflow: hidden;
+    z-index: 1;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+}
+
+.reflection-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 14px;
+    padding: 1px;
+    background: var(--border);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.reflection-card.blue::after {
+    background: linear-gradient(135deg, var(--accent) 0%, #3b82f6 100%);
+}
+
+.reflection-card.gold::after {
+    background: linear-gradient(135deg, var(--accent2) 0%, #f59e0b 100%);
+}
+
+.reflection-card.green::after {
+    background: linear-gradient(135deg, var(--accent3) 0%, #10b981 100%);
+}
+
+.reflection-card:hover::after {
+    opacity: 1;
+}
+
+.reflection-card:hover {
+    border-color: transparent;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.02);
 }
 
 .reflection-card::before {
@@ -1360,6 +1473,7 @@ code.inline {
     left: 0;
     right: 0;
     height: 3px;
+    z-index: 2;
 }
 
 .reflection-card.blue::before { background: var(--accent); }
