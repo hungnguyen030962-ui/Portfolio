@@ -133,29 +133,29 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'CNS_Baitap3_NguyenDuyHung_v1.0.docx',
             desc: 'Báo cáo Bài tập 3 - Tổng hợp kết quả phản hồi và kỹ thuật Prompt Engineering với trợ lý ảo Google Gemini.'
         },
-        'trung_bai3.png': {
+        'Dhung_bai3.png': {
             type: 'image',
             title: 'Ảnh chụp minh họa Google Gemini (Bài 3)',
             desc: 'Giao diện tương tác thực tế với trợ lý ảo Gemini, thực hiện câu lệnh Prompt nâng cao cấu trúc CREATE.',
-            src: 'assets/trung_bai3.png'
+            src: 'assets/Dhung_bai3.png'
         },
-        'trung_bai4.png': {
+        'Dhung_bai4.png': {
             type: 'image',
             title: 'Ảnh chụp bảng Trello Kanban (Bài 4)',
             desc: 'Bảng Kanban trực tuyến phân chia nhiệm vụ và theo dõi tiến độ của nhóm dự án CLB Kỹ năng mềm.',
-            src: 'assets/trung_bai4.png'
+            src: 'assets/Dhung_bai4.png'
         },
-        'trung_bai5_1.png': {
+        'Dhung_bai5_1.png': {
             type: 'image',
             title: 'Ảnh chụp Infographic Sáng tạo AI (Bài 5)',
             desc: 'Ấn phẩm truyền thông dạng Infographic quảng bá chiến dịch du lịch bền vững được đồng sáng tạo bởi AI.',
-            src: 'assets/trung_bai5_1.png'
+            src: 'assets/Dhung_bai5_1.png'
         },
-        'trung_bai5_2.png': {
+        'Dhung_bai5_2.png': {
             type: 'image',
             title: 'Ảnh chụp Concept Art Đô thị xanh (Bài 5)',
             desc: 'Hình ảnh đô thị sinh thái xanh trong tương lai được sinh bởi công cụ đồ họa trí tuệ nhân tạo Midjourney.',
-            src: 'assets/trung_bai5_2.png'
+            src: 'assets/Dhung_bai5_2.png'
         }
     };
 
