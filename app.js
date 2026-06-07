@@ -1,80 +1,26 @@
 /* ==========================================================================
-   JS Application Logic - CNS & AI Digital Portfolio
+   JS Application Logic - Redesigned Digital Portfolio
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Initialize Application Components ---
-    initRouter();
     initTheme();
-    initProjectTabs();
+    initScrollSpy();
     initDirectoryExplorer();
     initCraapTable();
     initLightbox();
     initKanbanDragDrop();
     initTeacherFeedback();
+    initRevealOnScroll();
 });
 
 // ==========================================================================
-// 1. VIRTUAL ROUTER (SPA Routing)
-// ==========================================================================
-function initRouter() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('.page-section');
-
-    function handleRoute() {
-        const hash = window.location.hash || '#about';
-        const pageId = hash.substring(1);
-        
-        let targetSection = document.getElementById(pageId);
-        
-        // Fallback if section doesn't exist
-        if (!targetSection) {
-            window.location.hash = '#about';
-            return;
-        }
-
-        // Update Nav Active States
-        navLinks.forEach(link => {
-            if (link.getAttribute('data-page') === pageId) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-
-        // Toggle Section Visibility
-        sections.forEach(sec => {
-            if (sec.id === pageId) {
-                sec.classList.add('active');
-            } else {
-                sec.classList.remove('active');
-            }
-        });
-
-        // Update Document Title based on page
-        const titles = {
-            'about': 'Giới Thiệu | CNS & AI Portfolio',
-            'projects': 'Dự Án Bài Tập | CNS & AI Portfolio',
-            'reflection': 'Tổng Kết & Tự Đánh Giá | CNS & AI Portfolio'
-        };
-        document.title = titles[pageId] || 'Hồ Sơ Năng Lực CNS & AI';
-
-        // Scroll to top smoothly
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Bind events
-    window.addEventListener('hashchange', handleRoute);
-    
-    // Initial route handling
-    handleRoute();
-}
-
-// ==========================================================================
-// 2. THEME CONTROLLER (Dark / Light Mode)
+// 1. THEME CONTROLLER (Dark / Light Mode)
 // ==========================================================================
 function initTheme() {
     const themeBtn = document.getElementById('theme-toggle');
+    if (!themeBtn) return;
+    
     const darkIcon = themeBtn.querySelector('.theme-icon-dark');
     const lightIcon = themeBtn.querySelector('.theme-icon-light');
 
@@ -84,13 +30,13 @@ function initTheme() {
     if (savedTheme === 'light') {
         document.body.classList.add('light-theme');
         document.body.classList.remove('dark-theme');
-        darkIcon.style.display = 'none';
-        lightIcon.style.display = 'block';
+        if (darkIcon) darkIcon.style.display = 'none';
+        if (lightIcon) lightIcon.style.display = 'block';
     } else {
         document.body.classList.add('dark-theme');
         document.body.classList.remove('light-theme');
-        darkIcon.style.display = 'block';
-        lightIcon.style.display = 'none';
+        if (darkIcon) darkIcon.style.display = 'block';
+        if (lightIcon) lightIcon.style.display = 'none';
     }
 
     themeBtn.addEventListener('click', () => {
@@ -99,47 +45,47 @@ function initTheme() {
         
         if (isLight) {
             localStorage.setItem('portfolio-theme', 'light');
-            darkIcon.style.display = 'none';
-            lightIcon.style.display = 'block';
+            if (darkIcon) darkIcon.style.display = 'none';
+            if (lightIcon) lightIcon.style.display = 'block';
             showToast('Đã chuyển sang giao diện Sáng ☀️', 'success');
         } else {
             localStorage.setItem('portfolio-theme', 'dark');
-            darkIcon.style.display = 'block';
-            lightIcon.style.display = 'none';
+            if (darkIcon) darkIcon.style.display = 'block';
+            if (lightIcon) lightIcon.style.display = 'none';
             showToast('Đã chuyển sang giao diện Tối 🌙', 'success');
         }
     });
 }
 
-
-
 // ==========================================================================
-// 4. PROJECT SECTION TABS
+// 2. SCROLL SPY (Navigation Link Highlighting on Scroll)
 // ==========================================================================
-function initProjectTabs() {
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabPanels = document.querySelectorAll('.tab-panel');
+function initScrollSpy() {
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
 
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const targetTab = btn.getAttribute('data-tab');
+    if (sections.length === 0 || navLinks.length === 0) return;
 
-            // Remove active states from buttons and panels
-            tabBtns.forEach(b => b.classList.remove('active'));
-            tabPanels.forEach(p => p.classList.remove('active'));
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (window.scrollY >= (sectionTop - 180)) {
+                current = section.getAttribute('id');
+            }
+        });
 
-            // Set active states
-            btn.classList.add('active');
-            const activePanel = document.getElementById(targetTab);
-            if (activePanel) {
-                activePanel.classList.add('active');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === current) {
+                link.classList.add('active');
             }
         });
     });
 }
 
 // ==========================================================================
-// 5. INTERACTIVE DIRECTORY TREE EXPLORER (Bài 1)
+// 3. INTERACTIVE DIRECTORY TREE EXPLORER (Bài 1)
 // ==========================================================================
 function initDirectoryExplorer() {
     const folderNodes = document.querySelectorAll('.tree-node.folder');
@@ -165,7 +111,7 @@ function initDirectoryExplorer() {
 }
 
 // ==========================================================================
-// 6. CRAAP CRITERIA INTERACTIVE ROWS (Bài 2)
+// 4. CRAAP CRITERIA INTERACTIVE ROWS (Bài 2)
 // ==========================================================================
 function initCraapTable() {
     const rows = document.querySelectorAll('.clickable-row');
@@ -189,7 +135,7 @@ function initCraapTable() {
 }
 
 // ==========================================================================
-// 7. KANBAN KÉO THẢ VÀ DI CHUYỂN THẺ (Bài 4)
+// 5. KANBAN KÉO THẢ VÀ DI CHUYỂN THẺ (Bài 4)
 // ==========================================================================
 function initKanbanDragDrop() {
     const cards = document.querySelectorAll('.kanban-card');
@@ -259,7 +205,7 @@ function updateKanbanButtons(card, currentColId = '') {
 }
 
 // ==========================================================================
-// 8. IMAGE LIGHTBOX SYSTEM (Bài 5)
+// 6. IMAGE LIGHTBOX SYSTEM (Bài 5)
 // ==========================================================================
 function initLightbox() {
     const lightbox = document.getElementById('lightbox');
@@ -277,7 +223,7 @@ function initLightbox() {
     }
 
     function closeLightbox() {
-        lightbox.style.display = 'none';
+        if (lightbox) lightbox.style.display = 'none';
     }
 
     if (closeBtn) {
@@ -285,11 +231,13 @@ function initLightbox() {
     }
 
     // Close on click outside the image
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
-            closeLightbox();
-        }
-    });
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
+                closeLightbox();
+            }
+        });
+    }
 
     // Close on Escape key
     document.addEventListener('keydown', (e) => {
@@ -300,7 +248,7 @@ function initLightbox() {
 }
 
 // ==========================================================================
-// 9. TOAST NOTIFICATION SYSTEM
+// 7. TOAST NOTIFICATION SYSTEM
 // ==========================================================================
 function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
@@ -329,7 +277,7 @@ function showToast(message, type = 'success') {
 }
 
 // ==========================================================================
-// 10. LECTURER FEEDBACK CONTROLLER
+// 8. LECTURER FEEDBACK CONTROLLER
 // ==========================================================================
 function initTeacherFeedback() {
     const btnToggle = document.getElementById('btn-toggle-feedback');
@@ -348,7 +296,7 @@ function initTeacherFeedback() {
     }
 
     btnToggle.addEventListener('click', () => {
-        inputArea.classList.remove('hidden');
+        if (inputArea) inputArea.classList.remove('hidden');
         btnToggle.classList.add('hidden');
         // Pre-fill text area with current text without quotes
         const currentText = reviewText.innerText.replace(/^"|"$/g, '');
@@ -357,7 +305,7 @@ function initTeacherFeedback() {
     });
 
     btnCancel.addEventListener('click', () => {
-        inputArea.classList.add('hidden');
+        if (inputArea) inputArea.classList.add('hidden');
         btnToggle.classList.remove('hidden');
     });
 
@@ -371,8 +319,32 @@ function initTeacherFeedback() {
         reviewText.innerHTML = `<em>"${feedbackVal}"</em>`;
         localStorage.setItem('portfolio-teacher-feedback', feedbackVal);
         
-        inputArea.classList.add('hidden');
+        if (inputArea) inputArea.classList.add('hidden');
         btnToggle.classList.remove('hidden');
         showToast('Đã đăng tải đánh giá của giảng viên thành công!', 'success');
     });
+}
+
+// ==========================================================================
+// 9. REVEAL ANIMATIONS ON SCROLL
+// ==========================================================================
+function initRevealOnScroll() {
+    const reveals = document.querySelectorAll('.reveal');
+
+    function checkReveal() {
+        const windowHeight = window.innerHeight;
+        reveals.forEach(el => {
+            const elementTop = el.getBoundingClientRect().top;
+            const elementVisible = 100;
+            if (elementTop < windowHeight - elementVisible) {
+                el.classList.add('visible');
+            } else {
+                el.classList.remove('visible');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', checkReveal);
+    // Trigger once on load to show elements already in view
+    checkReveal();
 }
